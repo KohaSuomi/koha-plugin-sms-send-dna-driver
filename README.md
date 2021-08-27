@@ -30,7 +30,7 @@ Once set up is complete you will need to alter your UseKohaPlugins system prefer
 
 # Build
 
-Go to your plugin installation path and build driver.
+Go to your plugin installation path and build the driver.
 
     perl Build.PL
     ./Build
@@ -47,3 +47,5 @@ The driver needs yaml configuration to work. Set your config file path to koha_c
     baseUrl: https://url.fi
     appId: foobaa
     callbackUrl: https://mykohaurl.fi/api/delivery
+
+Set the DNA::Driver to SMSSendDriver systempreference and enjoy.
