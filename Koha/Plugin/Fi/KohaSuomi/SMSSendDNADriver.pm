@@ -15,7 +15,7 @@ our $VERSION = "1.0";
 
 ## Here is our metadata, some keys are required, some are optional
 our $metadata = {
-    name            => 'Send SMS DNA',
+    name            => 'SMS::Send::DNA::Driver',
     author          => 'Johanna Räisä',
     date_authored   => '2021-08-27',
     date_updated    => "2021-08-27",
