@@ -30,6 +30,7 @@ sub new {
         my $password = $params->{_password} ? $params->{_password} : $params->{_passwd};
         my $appId = $params->{_appId};
         my $baseUrl = $params->{_baseUrl};
+        my $callbackUrl = $params->{_callbackUrl};
 
         if (! defined $username ) {
             warn "->send_sms(_login) must be defined!";
@@ -61,6 +62,7 @@ sub new {
         $self->{_password} = $password;
         $self->{_appId} = $appId;
         $self->{_baseUrl} = $baseUrl;
+        $self->{callbackUrl} = $callbackUrl;
 
         return $self;
 }
@@ -91,6 +93,7 @@ sub send_sms {
     my $message = $params->{text};
     my $recipientNumber = $params->{to};
     my $url = $self->{_baseUrl}.$self->{_appId};
+    my $callbackUrl = $self->{_callbackUrl};
 
     if (! defined $message ) {
         warn "->send_sms(text) must be defined!";
@@ -140,6 +143,8 @@ sub send_sms {
         recipient => {number => $recipientNumber},
         data => {message => $message, allowed_fragments => $fragments }
     };
+    
+    $params->{callback_url} = $callbackUrl if $callbackUrl;
 
     ($error, $res) = _rest_call($url.'/sms', $headers, undef, $params);
 
