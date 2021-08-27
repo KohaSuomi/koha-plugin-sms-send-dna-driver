@@ -1,4 +1,4 @@
-package Koha::Plugin::Fi::KohaSuomi::ImportRemoteBiblios;
+package Koha::Plugin::Fi::KohaSuomi::SMSSendDNADriver;
 
 ## It's good practice to use Modern::Perl
 use Modern::Perl;
