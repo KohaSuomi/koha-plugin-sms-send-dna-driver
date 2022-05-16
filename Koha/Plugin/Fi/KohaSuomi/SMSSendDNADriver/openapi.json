@@ -1,0 +1,58 @@
+{
+  "/notices/{notice_id}/report/dna": {
+    "post": {
+      "x-mojo-to": "Fi::KohaSuomi::SMSSendDNADriver::Controllers::ReportController#set",
+      "operationId": "updateDNA",
+      "tags": [
+        "Notices"
+      ],
+      "parameters": [
+        {
+          "name": "notice_id",
+          "in": "path",
+          "description": "Identifier",
+          "required": true,
+          "type": "integer"
+        },
+        {
+          "name": "body",
+          "in": "body",
+          "description": "A JSON object containing the report",
+          "required": true,
+          "schema": {
+            "type": "object"
+          }
+        }
+      ],
+      "produces": [
+        "application/json"
+      ],
+      "responses": {
+        "200": {
+          "description": "Response for receiving the report.",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "404": {
+          "description": "An error occured",
+          "schema": {
+            "type": "object",
+            "properties": {
+              "error": {
+                "description": "Notice not found",
+                "type": "string"
+              }
+            }
+          }
+        },
+        "500": {
+          "description": "Internal error",
+          "schema": {
+            "type": "object"
+          }
+        }
+      }
+    }
+  }
+}

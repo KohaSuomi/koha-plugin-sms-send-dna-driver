@@ -144,7 +144,11 @@ sub send_sms {
         data => {message => $message, allowed_fragments => $fragments }
     };
     
-    $params->{callback_url} = $callbackUrl if $callbackUrl;
+    if ($callbackUrl) {
+        my $msg_id = $params->{_message_id};
+        $callbackUrl =~ s/\{notice_id\}|\{messagenumber\}/$msg_id/g;
+        $params->{callback_url} = $callbackUrl;
+    }
 
     ($error, $res) = _rest_call($url.'/sms', $headers, undef, $params);
 
