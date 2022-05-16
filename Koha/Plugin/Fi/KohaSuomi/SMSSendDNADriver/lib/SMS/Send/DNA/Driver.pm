@@ -108,12 +108,14 @@ sub send_sms {
     $recipientNumber =~ s/'//g;
     substr($recipientNumber, 0, 1, "+358") unless "+" eq substr($recipientNumber, 0, 1);
     $message =~ s/(")|(\$\()|(`)/\\"/g; #Sanitate " so it won't break the system( iconv'ed curl command )
+    my $gsm0388 = decode("gsm0338",encode("gsm0338", $message));
     my $fragment_length = 160;
-    if($message =~ /[^\@£\$¥èéùìòÇØøÅå&#916;_&#934;&#915;&#923;&#937;&#928;&#936;&#931;&#920;&#926;ÆæßÉ !"#¤%\&\'\(\)\*\+\,\-\.\/0-9:;<=>\?¡A-ZÄÖÑÜ§¿a-zäöñüà]/ ) {
+    if($message ne $gsm0388) {
         $fragment_length = 70;
+        $message = $gsm0388;
     }
-    my $gsm0338 = encode("gsm0338", $message);
-    my $message_length = length($gsm0338);
+    
+    my $message_length = length(encode("gsm0338", $message));
 
     my $fragments;
     if ($message_length > $fragment_length) {
@@ -160,7 +162,6 @@ sub send_sms {
         die "Connection failed with: ". $res->{error};
         return;
     } else {
-        ($error, $revoke) = _rest_call($url.'/revoke', {'Content-Type' => 'application/x-www-form-urlencoded'}, $authorization, {token => $token->{access_token}});
         return 1;
     }
 }
