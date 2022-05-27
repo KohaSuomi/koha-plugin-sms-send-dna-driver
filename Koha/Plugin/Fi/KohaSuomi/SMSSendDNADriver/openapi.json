@@ -1,5 +1,5 @@
 {
-  "/notices/{notice_id}/report/dna": {
+  "/notices/{token}/report/dna": {
     "post": {
       "x-mojo-to": "Fi::KohaSuomi::SMSSendDNADriver::Controllers::ReportController#set",
       "operationId": "updateDNA",
@@ -8,11 +8,11 @@
       ],
       "parameters": [
         {
-          "name": "notice_id",
+          "name": "token",
           "in": "path",
           "description": "Identifier",
           "required": true,
-          "type": "integer"
+          "type": "string"
         },
         {
           "name": "body",

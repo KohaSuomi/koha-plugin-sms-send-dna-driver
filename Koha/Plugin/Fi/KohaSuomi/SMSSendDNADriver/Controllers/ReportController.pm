@@ -20,6 +20,7 @@ use Modern::Perl;
 use Mojo::Base 'Mojolicious::Controller';
 use Try::Tiny;
 use Koha::Notice::Messages;
+use C4::Context;
 
 =head1 API
 
@@ -33,18 +34,22 @@ sub set {
     my $status = $body->{status};
     my $delivery_note = $body->{error};
     my $notice;
-
+    my $dbh = C4::Context->dbh;
     return try {
+        my $sth = $dbh->prepare("SELECT message_id FROM kohasuomi_sms_token WHERE token = ?;");
+        $sth->execute($token);
+        my $notice_id = $sth->fetchrow;
         $notice = Koha::Notice::Messages->find($notice_id);
 
         if ($status eq "error") {
             # Delivery was failed. Set notice status to failed and add delivery
-            # note provided by Labyrintti.
             $notice->set({
-                status        => 'failed',
-                delivery_note => $delivery_note,
+                status       => 'failed',
+                failure_code => $delivery_note,
             })->store;
         }
+        $sth = $dbh->prepare("DELETE FROM kohasuomi_sms_token WHERE message_id = ?;");
+        $sth->execute($notice_id);
         return $c->render(status => 200, openapi => "");
     }
     catch {

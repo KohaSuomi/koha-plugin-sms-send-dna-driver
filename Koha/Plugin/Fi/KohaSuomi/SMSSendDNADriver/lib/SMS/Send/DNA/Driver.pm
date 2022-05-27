@@ -148,7 +148,14 @@ sub send_sms {
     
     if ($callbackUrl) {
         my $msg_id = $params->{_message_id};
-        $callbackUrl =~ s/\{notice_id\}|\{messagenumber\}/$msg_id/g;
+        my ( $uuid, $uuidstring );
+        UUID::generate($uuid);
+        UUID::unparse( $uuid, $uuidstring );
+        my @params = ($uuidstring, $msg_id);
+        my $dbh = C4::Context->dbh;
+        my $sth = $dbh->prepare("INSERT INTO kohasuomi_sms_token (token,message_id) VALUES (?,?);");
+        $sth->execute(@params);
+        $callbackUrl =~ s/\{token\}|\{messagenumber\}/$uuidstring/g;
         $params->{callback_url} = $callbackUrl;
     }
 
