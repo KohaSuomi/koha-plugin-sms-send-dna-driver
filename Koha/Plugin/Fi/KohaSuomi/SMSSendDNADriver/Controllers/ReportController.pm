@@ -29,7 +29,7 @@ use C4::Context;
 sub set {
     my $c = shift->openapi->valid_input or return;
 
-    my $notice_id = $c->validation->param('notice_id');
+    my $token = $c->validation->param('token');
     my $body = $c->req->json;
     my $status = $body->{status};
     my $delivery_note = $body->{error};
