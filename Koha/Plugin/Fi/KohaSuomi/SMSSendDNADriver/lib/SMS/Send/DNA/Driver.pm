@@ -9,6 +9,7 @@ use Encode;
 use Mojo::JSON qw(from_json);
 use Mojo::URL;
 use POSIX;
+use UUID;
 
 use Try::Tiny;
 
@@ -62,7 +63,7 @@ sub new {
         $self->{_password} = $password;
         $self->{_appId} = $appId;
         $self->{_baseUrl} = $baseUrl;
-        $self->{callbackUrl} = $callbackUrl;
+        $self->{_callbackUrl} = $callbackUrl;
 
         return $self;
 }
@@ -141,7 +142,7 @@ sub send_sms {
 
     $headers = {Authorization => "Bearer $token->{access_token}", 'Content-Type' => 'application/json'};
 
-    my $params = {
+    my $reqparams = {
         recipient => {number => $recipientNumber},
         data => {message => $message, allowed_fragments => $fragments }
     };
@@ -156,10 +157,10 @@ sub send_sms {
         my $sth = $dbh->prepare("INSERT INTO kohasuomi_sms_token (token,message_id) VALUES (?,?);");
         $sth->execute(@params);
         $callbackUrl =~ s/\{token\}|\{messagenumber\}/$uuidstring/g;
-        $params->{callback_url} = $callbackUrl;
+        $reqparams->{callback_url} = $callbackUrl;
     }
 
-    ($error, $res) = _rest_call($url.'/sms', $headers, undef, $params);
+    ($error, $res) = _rest_call($url.'/sms', $headers, undef, $reqparams);
 
     if ($error) {
         die "Connection failed with: ". $error->{message};
