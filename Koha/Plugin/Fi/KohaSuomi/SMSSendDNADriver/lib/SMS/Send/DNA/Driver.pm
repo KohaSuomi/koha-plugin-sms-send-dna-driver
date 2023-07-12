@@ -113,7 +113,6 @@ sub send_sms {
     my $fragment_length = 160;
     if($message ne $gsm0388) {
         $fragment_length = 70;
-        $message = $gsm0388;
     }
     
     my $message_length = length(encode("gsm0338", $message));
