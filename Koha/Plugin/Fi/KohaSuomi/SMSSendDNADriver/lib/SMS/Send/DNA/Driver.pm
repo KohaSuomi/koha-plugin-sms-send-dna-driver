@@ -80,7 +80,7 @@ sub _rest_call {
         $tx = $ua->post($url => $headers => json => $params);
     }
     if ($tx->error) {
-        return ($tx->error, undef);
+        return (from_json($tx->res->body), undef);
     } else {
         return (undef, from_json($tx->res->body));
     }
@@ -136,7 +136,7 @@ sub send_sms {
     ($error, $token) = _rest_call($url.'/token', $headers, $authorization, {grant_type => 'client_credentials'});
 
     if ($error) {
-        die "Connection failed with: ". $error->{message};
+        die "Connection failed with: ". $error->{error};
         return;
     }
 
@@ -163,7 +163,7 @@ sub send_sms {
     ($error, $res) = _rest_call($url.'/sms', $headers, undef, $reqparams);
 
     if ($error) {
-        die "Connection failed with: ". $error->{message};
+        die "Connection failed with: ". $error->{error};
         return;
     }
     elsif ($res->{status} eq "error") {
