@@ -33,11 +33,10 @@ sub get_localized_metadata {
 
     if ($lang eq 'sv-SE') {
         $name = "SMS::Send::DNA::Driver";
-        $description = "Skicka SMS-meddelanden till DNA Viestit-gränssnittet. (Lokala databaser, om DNA används)";
-    
+        $description = "Skicka SMS-meddelanden till DNA Viestit -gränssnittet. (Lokala databaser, om DNA används)";
     } elsif ($lang eq 'fi-FI' ) {
         $name = "SMS::Send::DNA::Driver";
-        $description = "Lähetä SMS-viestejä DNA Viestit-liittymään. (Paikalliskannat, jos DNA käytössä)";
+        $description = "Lähetä SMS-viestejä DNA Viestit -liittymään. (Paikalliskannat, jos DNA käytössä)";
     } else {
         $name = "SMS::Send::DNA::Driver";
         $description = "Send SMS messages to DNA Viestit interface. (Local databases, if DNA is used)";
